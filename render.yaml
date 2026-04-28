@@ -1,0 +1,25 @@
+# Render deployment configuration
+# Commit this file — Render reads it automatically on deploy
+
+services:
+  - type: web
+    name: kavya-kanaja-backend
+    runtime: python
+    region: singapore          # Closest to India — lowest latency for your users
+    plan: free                 # Free tier — perfect for development
+
+    # Build command — installs all dependencies from requirements.txt
+    buildCommand: pip install -r requirements.txt
+
+    # Start command — runs FastAPI with uvicorn
+    # --host 0.0.0.0 is required on Render (binds to all interfaces)
+    # --port $PORT uses Render's assigned port (automatically set)
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+
+    # Environment variables
+    # GROQ_API_KEY is set in Render Dashboard → Environment (not here, for security)
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: GROQ_API_KEY
+        sync: false            # ← Tells Render: "ask the user for this value"
