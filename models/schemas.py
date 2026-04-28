@@ -3,7 +3,7 @@ Pydantic models for all request/response shapes.
 UPDATED (Group B): Added 5 new request+response model pairs.
 """
 
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, validator
 from typing import Optional, List
 
 
@@ -21,16 +21,16 @@ class ExplainRequest(BaseModel):
     language: str = "en"
     mode: str = "full"
 
-    @field_validator("language")
-    @classmethod
+    @validator("language")
+    
     def validate_language(cls, v: str) -> str:
         allowed = {"en", "kn"}
         if v not in allowed:
             raise ValueError(f"language must be one of {allowed}, got '{v}'")
         return v
 
-    @field_validator("mode")
-    @classmethod
+    @validator("mode")
+    
     def validate_mode(cls, v: str) -> str:
         allowed = {
             "full", "word",
@@ -41,8 +41,8 @@ class ExplainRequest(BaseModel):
             raise ValueError(f"mode must be one of {allowed}, got '{v}'")
         return v
 
-    @field_validator("text")
-    @classmethod
+    @validator("text")
+    
     def validate_text(cls, v: str) -> str:
         if not v or not v.strip():
             raise ValueError("text cannot be empty")
@@ -80,23 +80,23 @@ class StoryRequest(BaseModel):
     language: str = "en"
     style: str = "simple"       # "simple" | "dramatic" | "children"
 
-    @field_validator("language")
-    @classmethod
+    @validator("language")
+    
     def validate_language(cls, v: str) -> str:
         if v not in {"en", "kn"}:
             raise ValueError(f"language must be 'en' or 'kn', got '{v}'")
         return v
 
-    @field_validator("style")
-    @classmethod
+    @validator("style")
+    
     def validate_style(cls, v: str) -> str:
         allowed = {"simple", "dramatic", "children"}
         if v not in allowed:
             raise ValueError(f"style must be one of {allowed}, got '{v}'")
         return v
 
-    @field_validator("poem_text")
-    @classmethod
+    @validator("poem_text")
+    
     def validate_poem_text(cls, v: str) -> str:
         if not v or not v.strip():
             raise ValueError("poem_text cannot be empty")
@@ -131,15 +131,15 @@ class PoetRequest(BaseModel):
     poet_name: str
     language: str = "en"
 
-    @field_validator("language")
-    @classmethod
+    @validator("language")
+    
     def validate_language(cls, v: str) -> str:
         if v not in {"en", "kn"}:
             raise ValueError(f"language must be 'en' or 'kn', got '{v}'")
         return v
 
-    @field_validator("poet_name")
-    @classmethod
+    @validator("poet_name")
+    
     def validate_poet_name(cls, v: str) -> str:
         if not v or not v.strip():
             raise ValueError("poet_name cannot be empty")
@@ -180,29 +180,29 @@ class QuizRequest(BaseModel):
     num_questions: int = 5      # How many MCQs to generate (1-10)
     difficulty: str = "medium"  # "easy" | "medium" | "hard"
 
-    @field_validator("language")
-    @classmethod
+    @validator("language")
+    
     def validate_language(cls, v: str) -> str:
         if v not in {"en", "kn"}:
             raise ValueError(f"language must be 'en' or 'kn', got '{v}'")
         return v
 
-    @field_validator("difficulty")
-    @classmethod
+    @validator("difficulty")
+    
     def validate_difficulty(cls, v: str) -> str:
         if v not in {"easy", "medium", "hard"}:
             raise ValueError(f"difficulty must be easy/medium/hard, got '{v}'")
         return v
 
-    @field_validator("num_questions")
-    @classmethod
+    @validator("num_questions")
+    
     def validate_num_questions(cls, v: int) -> int:
         if not 1 <= v <= 10:
             raise ValueError("num_questions must be between 1 and 10")
         return v
 
-    @field_validator("poem_text")
-    @classmethod
+    @validator("poem_text")
+    
     def validate_poem_text(cls, v: str) -> str:
         if not v or not v.strip():
             raise ValueError("poem_text cannot be empty")
@@ -254,22 +254,22 @@ class DialogueRequest(BaseModel):
     language: str = "en"
     num_characters: int = 2     # How many characters in the dialogue (2-4)
 
-    @field_validator("language")
-    @classmethod
+    @validator("language")
+    
     def validate_language(cls, v: str) -> str:
         if v not in {"en", "kn"}:
             raise ValueError(f"language must be 'en' or 'kn', got '{v}'")
         return v
 
-    @field_validator("num_characters")
-    @classmethod
+    @validator("num_characters")
+    
     def validate_num_characters(cls, v: int) -> int:
         if not 2 <= v <= 4:
             raise ValueError("num_characters must be between 2 and 4")
         return v
 
-    @field_validator("poem_text")
-    @classmethod
+    @validator("poem_text")
+    
     def validate_poem_text(cls, v: str) -> str:
         if not v or not v.strip():
             raise ValueError("poem_text cannot be empty")
@@ -306,29 +306,29 @@ class GenerateRequest(BaseModel):
     language: str = "en"
     length: str = "short"       # "short" (4-8 lines) | "medium" (8-16) | "long" (16+)
 
-    @field_validator("language")
-    @classmethod
+    @validator("language")
+    
     def validate_language(cls, v: str) -> str:
         if v not in {"en", "kn"}:
             raise ValueError(f"language must be 'en' or 'kn', got '{v}'")
         return v
 
-    @field_validator("length")
-    @classmethod
+    @validator("length")
+    
     def validate_length(cls, v: str) -> str:
         if v not in {"short", "medium", "long"}:
             raise ValueError(f"length must be short/medium/long, got '{v}'")
         return v
 
-    @field_validator("poet_name")
-    @classmethod
+    @validator("poet_name")
+    
     def validate_poet_name(cls, v: str) -> str:
         if not v or not v.strip():
             raise ValueError("poet_name cannot be empty")
         return v.strip()
 
-    @field_validator("topic")
-    @classmethod
+    @validator("topic")
+    
     def validate_topic(cls, v: str) -> str:
         if not v or not v.strip():
             raise ValueError("topic cannot be empty")
@@ -415,15 +415,15 @@ class DifficultyRequest(BaseModel):
     poem_text: str
     language: str = "en"
 
-    @field_validator("language")
-    @classmethod
+    @validator("language")
+    
     def validate_language(cls, v: str) -> str:
         if v not in {"en", "kn"}:
             raise ValueError(f"language must be 'en' or 'kn', got '{v}'")
         return v
 
-    @field_validator("poem_text")
-    @classmethod
+    @validator("poem_text")
+    
     def validate_poem_text(cls, v: str) -> str:
         if not v or not v.strip():
             raise ValueError("poem_text cannot be empty")
@@ -460,24 +460,24 @@ class TransliterateRequest(BaseModel):
     direction: str = "kn_to_roman"   # "kn_to_roman" | "roman_to_kn"
     style: str = "readable"           # "readable" | "iast" (scholarly)
 
-    @field_validator("direction")
-    @classmethod
+    @validator("direction")
+    
     def validate_direction(cls, v: str) -> str:
         allowed = {"kn_to_roman", "roman_to_kn"}
         if v not in allowed:
             raise ValueError(f"direction must be one of {allowed}, got '{v}'")
         return v
 
-    @field_validator("style")
-    @classmethod
+    @validator("style")
+    
     def validate_style(cls, v: str) -> str:
         allowed = {"readable", "iast"}
         if v not in allowed:
             raise ValueError(f"style must be one of {allowed}, got '{v}'")
         return v
 
-    @field_validator("text")
-    @classmethod
+    @validator("text")
+    
     def validate_text(cls, v: str) -> str:
         if not v or not v.strip():
             raise ValueError("text cannot be empty")
